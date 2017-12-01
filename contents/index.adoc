@@ -12,7 +12,7 @@ You'll create a "Hello, World!" type of Android application, explore its generat
 * Android Studio, version 2.4 or higher. You can download Android Studio, along with the latest Android SDK, from https://developer.android.com/studio/index.html . The system requirements for the IDE are also found at that link.
 * The Java Development Kit (JDK), version 1.7 or higher
 
-== Create a new Android Studio Project
+== Create a new Android Studio project
 
 After downloading and installing Android Studio, start the application. On the welcome screen, click the link entitled, "Start a new Android Studio project", as shown in the figure. When ready, click _Next_.
 
@@ -32,7 +32,7 @@ Accept all the defaults on the "Configure Activity" screen and click _Finish_.
 
 image::Configure-Activity.png[]
 
-== Review the List of Generated Gradle Files
+== Review the list of generated Gradle files
 
 By default, Android Studio will start with a "Project View" in "Android" mode, as shown in the figure:
 
@@ -68,7 +68,7 @@ The last line shows the value of the `distributionUrl`, which is the location wh
 
 NOTE: The specific version number might differ from that shown here (3.4.1), and the URL might refer to a binary version (`-bin`) instead of the complete (`-all`) version shown in this example.
 
-== Review the Top-Level Gradle build file
+== Review the top-level Gradle build file
 
 The project `build.gradle` file should have contents similar to:
 
@@ -79,9 +79,13 @@ The project `build.gradle` file should have contents similar to:
 buildscript {                 // <1>
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {            // <2>
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
+        classpath 'com.android.tools.build:gradle:3.0.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -91,6 +95,10 @@ buildscript {                 // <1>
 allprojects {                 // <3>
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 }
 
@@ -103,7 +111,7 @@ task clean(type: Delete) {    // <4>
 <3> Configuration for top-level and module projects
 <4> Ad hoc task
 
-Gradle defines a domain-specific language (DSL) for builds, used inside the build files. The `buildscript` tag is part of that DSL. It tells Gradle that the build requires a plugin that may not be part of the baseline Gradle distribution, and tells Gradle where to find it. In this case, the required plugin is specified using coordinate syntax "group:name:version", where the group is `com.android.tools.build`, the name is `gradle`, and the version is `2.4.0-alpha7`.
+Gradle defines a domain-specific language (DSL) for builds, used inside the build files. The `buildscript` tag is part of that DSL. It tells Gradle that the build requires a plugin that may not be part of the baseline Gradle distribution, and tells Gradle where to find it. In this case, the required plugin is specified using coordinate syntax "group:name:version", where the group is `com.android.tools.build`, the name is `gradle`, and the version is `3.0.1`.
 
 NOTE: The version number of the Gradle plugin is updated frequently. Please use the latest plugin, as it will contain all the available bug fixes and performance improvements.
 
@@ -113,7 +121,7 @@ The `allprojects` tag holds configuration details that apply to both the top-lev
 
 Finally, the build file contains a custom (or _ad hoc_) task, called `clean`. It uses the built-in task type `Delete` and configures it so that the `clean` task will delete the `buildDir` in the `rootProject`. Both are project properties, whose values default to the `build` directory in the project where this app resides.
 
-== Review the Build File in the App Module
+== Review the build file in the app module
 
 Open the `build.gradle` file in the `app` module. The first line is:
 
@@ -169,9 +177,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:27.+'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 ----
 
@@ -181,13 +188,10 @@ Taking the simplest one first, the `testCompile` dependency consists only of the
 
 The `androidTestCompile` dependency refers to the Espresso testing library, which is used for integration testing of Android apps. In this case, Espresso is requested without the `support-annotations` library that it would normally include, because a different version is already included through other dependencies. In a later step, you'll see how to find out what version of this library was included and why.
 
-Finally, there are three lines that add dependencies to the `compile` configuration:
+Finally, there are two lines that add dependencies to the `compile` configuration:
 
 * The first, `fileTree(dir: 'libs', include: ['*.jar'])`, is a `fileTree` dependency that adds any jar files in the `libs` folder to the compile classpath
-* The second, `com.android.support:appcompat-v7:25.3.1` adds the Android Compatibility library to the project. This allows you to use the Material design theme and other capabilities in any Android app as old as SDK version 7
-* The final line, `com.android.support.constraint:constraint-layout:1.0.2`, adds the new Constraint Layout to the project. Combined with the Compatibility library, this lets you create an app with the most recent layout features
-
-
+* The second, `com.android.support:appcompat-v7:27.+` adds the Android Compatibility library to the project. This allows you to use the Material design theme and other capabilities in any Android app as old as SDK version 7. Note that the dependency version is specified using a dynamic version `27.+`.
 
 == Run standard Gradle tasks
 
@@ -216,40 +220,37 @@ $ ./gradlew :app:dependencies --configuration compile
 Project :app
 ------------------------------------------------------------
 
-compile - Classpath for compiling the main sources.
-+--- com.android.support:appcompat-v7:25.3.1
-|    +--- com.android.support:support-annotations:25.3.1
-|    +--- com.android.support:support-v4:25.3.1
-|    |    +--- com.android.support:support-compat:25.3.1
-|    |    |    \--- com.android.support:support-annotations:25.3.1
-|    |    +--- com.android.support:support-media-compat:25.3.1
-|    |    |    +--- com.android.support:support-annotations:25.3.1
-|    |    |    \--- com.android.support:support-compat:25.3.1 (*)
-|    |    +--- com.android.support:support-core-utils:25.3.1
-|    |    |    +--- com.android.support:support-annotations:25.3.1
-|    |    |    \--- com.android.support:support-compat:25.3.1 (*)
-|    |    +--- com.android.support:support-core-ui:25.3.1
-|    |    |    +--- com.android.support:support-annotations:25.3.1
-|    |    |    \--- com.android.support:support-compat:25.3.1 (*)
-|    |    \--- com.android.support:support-fragment:25.3.1
-|    |         +--- com.android.support:support-compat:25.3.1 (*)
-|    |         +--- com.android.support:support-media-compat:25.3.1 (*)
-|    |         +--- com.android.support:support-core-ui:25.3.1 (*)
-|    |         \--- com.android.support:support-core-utils:25.3.1 (*)
-|    +--- com.android.support:support-vector-drawable:25.3.1
-|    |    +--- com.android.support:support-annotations:25.3.1
-|    |    \--- com.android.support:support-compat:25.3.1 (*)
-|    \--- com.android.support:animated-vector-drawable:25.3.1
-|         \--- com.android.support:support-vector-drawable:25.3.1 (*)
-\--- com.android.support.constraint:constraint-layout:1.0.2
-     \--- com.android.support.constraint:constraint-layout-solver:1.0.2
+compile - Compile dependencies for 'main' sources.
+\--- com.android.support:appcompat-v7:27.+ -> 27.0.2
+     +--- com.android.support:support-annotations:27.0.2
+     +--- com.android.support:support-core-utils:27.0.2
+     |    +--- com.android.support:support-annotations:27.0.2
+     |    \--- com.android.support:support-compat:27.0.2
+     |         +--- com.android.support:support-annotations:27.0.2
+     |         \--- android.arch.lifecycle:runtime:1.0.3
+     |              +--- android.arch.lifecycle:common:1.0.3
+     |              \--- android.arch.core:common:1.0.0
+     +--- com.android.support:support-fragment:27.0.2
+     |    +--- com.android.support:support-compat:27.0.2 (*)
+     |    +--- com.android.support:support-core-ui:27.0.2
+     |    |    +--- com.android.support:support-annotations:27.0.2
+     |    |    \--- com.android.support:support-compat:27.0.2 (*)
+     |    +--- com.android.support:support-core-utils:27.0.2 (*)
+     |    \--- com.android.support:support-annotations:27.0.2
+     +--- com.android.support:support-vector-drawable:27.0.2
+     |    +--- com.android.support:support-annotations:27.0.2
+     |    \--- com.android.support:support-compat:27.0.2 (*)
+     \--- com.android.support:animated-vector-drawable:27.0.2
+          +--- com.android.support:support-vector-drawable:27.0.2 (*)
+          \--- com.android.support:support-core-ui:27.0.2 (*)
 
 (*) - dependencies omitted (listed previously)
+
 
 BUILD SUCCESSFUL
 ----
 
-From the output, you can see that the `support-annotations` module, version 25.3.1, is a dependency of the `appcompat-v7` library.
+From the output, you can see that the `support-annotations` module, version 27.0.2, is a dependency of the `appcompat-v7` library.
 
 Another way to see the version required is to use the `dependencyInsight` task. Run the following command (all on one line).
 
@@ -258,38 +259,34 @@ Another way to see the version required is to use the `dependencyInsight` task. 
 $ ./gradlew :app:dependencyInsight --dependency support-annotations \
  --configuration compile
 :app:dependencyInsight
-com.android.support:support-annotations:25.3.1
-+--- com.android.support:appcompat-v7:25.3.1
+com.android.support:support-annotations:27.0.2
++--- com.android.support:appcompat-v7:27.0.2
 |    \--- compile
-+--- com.android.support:support-compat:25.3.1
-|    +--- com.android.support:support-v4:25.3.1
-|    |    \--- com.android.support:appcompat-v7:25.3.1 (*)
-|    +--- com.android.support:support-vector-drawable:25.3.1
-|    |    +--- com.android.support:appcompat-v7:25.3.1 (*)
-|    |    \--- com.android.support:animated-vector-drawable:25.3.1
-|    |         \--- com.android.support:appcompat-v7:25.3.1 (*)
-|    +--- com.android.support:support-media-compat:25.3.1
-|    |    +--- com.android.support:support-v4:25.3.1 (*)
-|    |    \--- com.android.support:support-fragment:25.3.1
-|    |         \--- com.android.support:support-v4:25.3.1 (*)
-|    +--- com.android.support:support-core-utils:25.3.1
-|    |    +--- com.android.support:support-v4:25.3.1 (*)
-|    |    \--- com.android.support:support-fragment:25.3.1 (*)
-|    +--- com.android.support:support-core-ui:25.3.1
-|    |    +--- com.android.support:support-v4:25.3.1 (*)
-|    |    \--- com.android.support:support-fragment:25.3.1 (*)
-|    \--- com.android.support:support-fragment:25.3.1 (*)
-+--- com.android.support:support-core-ui:25.3.1 (*)
-+--- com.android.support:support-core-utils:25.3.1 (*)
-+--- com.android.support:support-media-compat:25.3.1 (*)
-\--- com.android.support:support-vector-drawable:25.3.1 (*)
++--- com.android.support:support-compat:27.0.2
+|    +--- com.android.support:support-fragment:27.0.2
+|    |    \--- com.android.support:appcompat-v7:27.0.2 (*)
+|    +--- com.android.support:support-core-utils:27.0.2
+|    |    +--- com.android.support:appcompat-v7:27.0.2 (*)
+|    |    \--- com.android.support:support-fragment:27.0.2 (*)
+|    +--- com.android.support:support-vector-drawable:27.0.2
+|    |    +--- com.android.support:appcompat-v7:27.0.2 (*)
+|    |    \--- com.android.support:animated-vector-drawable:27.0.2
+|    |         \--- com.android.support:appcompat-v7:27.0.2 (*)
+|    \--- com.android.support:support-core-ui:27.0.2
+|         +--- com.android.support:support-fragment:27.0.2 (*)
+|         \--- com.android.support:animated-vector-drawable:27.0.2 (*)
++--- com.android.support:support-core-ui:27.0.2 (*)
++--- com.android.support:support-core-utils:27.0.2 (*)
++--- com.android.support:support-fragment:27.0.2 (*)
+\--- com.android.support:support-vector-drawable:27.0.2 (*)
 
 (*) - dependencies omitted (listed previously)
+
 
 BUILD SUCCESSFUL
 ----
 
-Both the `dependency` and `dependencyInsight` tasks are available in any Gradle project. They can help you track down and resolve any issues with library version conflicts. For more details, see ...
+Both the `dependency` and `dependencyInsight` tasks are available in any Gradle project. They can help you track down and resolve any issues with library version conflicts.
 
 == Use the Gradle window
 
@@ -333,49 +330,37 @@ $ ./gradlew uninstallAll
 
 This will remove the app from all connected devices.
 
-== Run a Build Scan
+== Publish a build scan
 
-Build scans generate a complete report of all the dependencies, plugins, test outputs, and performance of your build. You can request a build scan by appending the `--scan` flag on any Gradle command using version 3.4 and up, or using the `-Dscan` flag on earlier versions of Gradle.
+https://gradle.com/build-scans[Build scans] are a persistent, shareable record of what happened when running a build.
+With build scans, you gain deep insights about your build.
 
-In order to use build scans, you need to add the build scan plugin and agree to the license. See the Build Scan Getting Started guide at ... for details, but to summarize, add the following sections to the top-level `build.gradle` file:
-
-[source,groovy]
-----
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2' }    // <1>
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
-        classpath 'com.gradle:build-scan-plugin:1.7.1'   // <1>
-    }
-}
-
-apply plugin: 'com.gradle.build-scan'                    // <1>
-
-buildScan {                                              // <1>
-    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-    licenseAgree = 'yes'
-}
-----
-<1> Added sections
-
-Now when you run:
+If you are using Gradle 4.3+, you can easily create a build scan by using the `--scan` command line option, e.g. `gradle build --scan`.
+For older Gradle versions, see the https://docs.gradle.com/build-scan-plugin/#getting_set_up[Build Scan Plugin User Manual] on how to enable build scans.
 
 ----
-$ ./gradlew build --scan
+./gradlew build --scan
+
+BUILD SUCCESSFUL in 1s
+4 actionable tasks: 4 executed
+
+Do you accept the Gradle Cloud Services license agreement (https://gradle.com/terms-of-service)? [yes, no]
+yes
+Gradle Cloud Services license agreement accepted.
+
+Publishing build scan...
+https://gradle.com/s/carzirlfjwjlo
 ----
 
-you will receive a link to the results, hosted at Gradle. The resulting page will resemble:
+The resulting page will resemble:
 
-image::Build-scan-for-HelloWorldGradle.png[]
+image::Build-scan-for-HelloWorldGradle.png[width=800]
 
 Feel free to explore all the details. The report contains information on many features, including dependencies. If you dig into the dependencies section and open the `_debugCompile` configuration, inside the `appcompat-v7` library is the `support-annotations` library described earlier.
 
-image::Build-scan-dep-support-annotations.png[]
+image::Build-scan-dep-support-annotations.png[width=800]
 
-Build scans are a powerful way to analyze your build. For more details, see https://guides.gradle.org/creating-build-scans/[the Getting Started guide for Creating Build Scans] and https://docs.gradle.com/build-scan-plugin/[the Build Scan Plugin User Manual].
+Build scans are a powerful way to analyze your build. For more details, see the https://guides.gradle.org/creating-build-scans/[Getting Started guide for Creating Build Scans] and the https://docs.gradle.com/build-scan-plugin/[Build Scan Plugin User Manual].
 
 == Summary
 
