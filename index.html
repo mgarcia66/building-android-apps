@@ -3,14 +3,14 @@
 <head><link crossorigin href="//assets.gradle.com" rel="preconnect">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,400i">
 <link rel="stylesheet" href="https://guides.gradle.org/css/asciidoctor.css">
-<link rel="stylesheet" href="https://guides.gradle.org/css/docs-blue-theme-4.5.2.css">
+<link rel="stylesheet" href="https://guides.gradle.org/css/docs-blue-theme-4.7.css">
 <link rel="apple-touch-icon" sizes="180x180" href="https://guides.gradle.org/icon/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="https://guides.gradle.org/icon/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="https://guides.gradle.org/icon/favicon-16x16.png" sizes="16x16">
 <link rel="manifest" href="https://guides.gradle.org/icon/manifest.json">
 <link rel="mask-icon" href="https://guides.gradle.org/icon/safari-pinned-tab.svg" color="#5bbad5">
 <link rel="shortcut icon" href="https://guides.gradle.org/icon/favicon.ico">
-<script defer src="https://guides.gradle.org/js/guides.js"></script>
+<script defer src="https://guides.gradle.org/js/guides-4.7.js"></script>
 <script defer src="https://guides.gradle.org/js/set-time-to-complete-text.js"></script>
 <script async src="https://guides.gradle.org/js/autotrack.js"></script>
 
@@ -21,7 +21,6 @@
 <meta name="author" content="Ken Kousen">
 <title>Building Android Apps</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="./coderay-asciidoctor.css">
 </head>
 <body class="article">
 <header class="site-layout__header site-header" itemscope="itemscope" itemtype="https://schema.org/WPHeader">
@@ -201,7 +200,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">include <span class="string"><span class="delimiter">'</span><span class="content">:app</span><span class="delimiter">'</span></span></code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">include ':app'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -212,11 +211,11 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">distributionBase=GRADLE_USER_HOME
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
-distributionUrl=https<span class="error">\</span>:<span class="comment">//services.gradle.org/distributions/gradle-4.1-all.zip</span></code></pre>
+distributionUrl=https\://services.gradle.org/distributions/gradle-4.1-all.zip</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -247,7 +246,7 @@ The specific version number might differ from that shown here (4.1), and the URL
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {                 <i class="conum" data-value="1"></i><b>(1)</b>
     repositories {
@@ -255,10 +254,10 @@ buildscript {                 <i class="conum" data-value="1"></i><b>(1)</b>
         jcenter()
     }
     dependencies {            <i class="conum" data-value="2"></i><b>(2)</b>
-        classpath <span class="string"><span class="delimiter">'</span><span class="content">com.android.tools.build:gradle:3.0.1</span><span class="delimiter">'</span></span>
+        classpath 'com.android.tools.build:gradle:3.0.1'
 
-        <span class="comment">// NOTE: Do not place your application dependencies here; they belong</span>
-        <span class="comment">// in the individual module build.gradle files</span>
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
@@ -269,7 +268,7 @@ allprojects {                 <i class="conum" data-value="3"></i><b>(3)</b>
     }
 }
 
-task clean(<span class="key">type</span>: Delete) {    <i class="conum" data-value="4"></i><b>(4)</b>
+task clean(type: Delete) {    <i class="conum" data-value="4"></i><b>(4)</b>
     delete rootProject.buildDir
 }</code></pre>
 </div>
@@ -328,7 +327,7 @@ The version number of the Gradle plugin is updated frequently. Please use the la
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">apply <span class="key">plugin</span>: <span class="string"><span class="delimiter">'</span><span class="content">com.android.application</span><span class="delimiter">'</span></span></code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">apply plugin: 'com.android.application'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -336,20 +335,20 @@ The version number of the Gradle plugin is updated frequently. Please use the la
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">android {
-    compileSdkVersion <span class="integer">26</span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">android {
+    compileSdkVersion 26
     defaultConfig {
-        applicationId <span class="string"><span class="delimiter">&quot;</span><span class="content">org.gradle.helloworldgradle</span><span class="delimiter">&quot;</span></span>
-        minSdkVersion <span class="integer">19</span>
-        targetSdkVersion <span class="integer">26</span>
-        versionCode <span class="integer">1</span>
-        versionName <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>
-        testInstrumentationRunner <span class="string"><span class="delimiter">&quot;</span><span class="content">android.support.test.runner.AndroidJUnitRunner</span><span class="delimiter">&quot;</span></span>
+        applicationId "org.gradle.helloworldgradle"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled <span class="predefined-constant">false</span>
-            proguardFiles getDefaultProguardFile(<span class="string"><span class="delimiter">'</span><span class="content">proguard-android.txt</span><span class="delimiter">'</span></span>), <span class="string"><span class="delimiter">'</span><span class="content">proguard-rules.pro</span><span class="delimiter">'</span></span>
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }</code></pre>
@@ -391,13 +390,13 @@ The version number of the Gradle plugin is updated frequently. Please use the la
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    implementation fileTree(<span class="key">dir</span>: <span class="string"><span class="delimiter">'</span><span class="content">libs</span><span class="delimiter">'</span></span>, <span class="key">include</span>: [<span class="string"><span class="delimiter">'</span><span class="content">*.jar</span><span class="delimiter">'</span></span>])
-    implementation <span class="string"><span class="delimiter">'</span><span class="content">com.android.support:appcompat-v7:26.1.0</span><span class="delimiter">'</span></span>
-    implementation <span class="string"><span class="delimiter">'</span><span class="content">com.android.support.constraint:constraint-layout:1.0.2</span><span class="delimiter">'</span></span>
-    testImplementation <span class="string"><span class="delimiter">'</span><span class="content">junit:junit:4.12</span><span class="delimiter">'</span></span>
-    androidTestImplementation <span class="string"><span class="delimiter">'</span><span class="content">com.android.support.test:runner:1.0.1</span><span class="delimiter">'</span></span>
-    androidTestImplementation <span class="string"><span class="delimiter">'</span><span class="content">com.android.support.test.espresso:espresso-core:3.0.1</span><span class="delimiter">'</span></span>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }</code></pre>
 </div>
 </div>
@@ -718,6 +717,9 @@ https://gradle.com/s/carzirlfjwjlo</pre>
 </div>
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>prettyPrint()</script>
 <footer class="site-layout__footer site-footer" itemscope="itemscope" itemtype="https://schema.org/WPFooter">
     <nav class="site-footer__navigation" itemtype="https://schema.org/SiteNavigationElement">
         <section class="site-footer__links">
