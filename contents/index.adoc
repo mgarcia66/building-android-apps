@@ -382,4 +382,4 @@ In this guide, you created an Android app and examined many of the Gradle capabi
 The book _Gradle Recipes for Android_, by Ken Kousen and published by O'Reilly Media, Inc, is available for purchase at http://shop.oreilly.com/product/0636920032656.do, but an electronic version can also be downloaded for free at https://gradle.org/books/ .
 
 
-include::contribute[]
+include::contribute[repo-path="gradle-guides/building-android-apps"]
