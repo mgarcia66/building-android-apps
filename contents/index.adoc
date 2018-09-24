@@ -305,7 +305,7 @@ Note that there is no release key at the moment. Look at the tasks listed in the
 
 image::Gradle-window-install.png[]
 
-You'll see that there is an `installDebug` task and an `uninstallDebug` task, an `uninstallRelease` task, and even an `uninstallAllTask`. Conspicuous by its absence, however, is an `installRelease` task. That task is only available if you create a signing configuration for a release key, which Gradle can use to create a signed release APK.
+You'll see that there is an `installDebug` task and an `uninstallDebug` task, an `uninstallRelease` task, and even an `uninstallAll` task. Conspicuous by its absence, however, is an `installRelease` task. That task is only available if you create a signing configuration for a release key, which Gradle can use to create a signed release APK.
 
 If you were now to start up multiple emulators or attach multiple devices, you could deploy the app into all of them by executing the `installDebug` task.
 
