@@ -9,8 +9,8 @@ You'll create a "Hello, World!" type of Android application, explore its generat
 == What you'll need
 
 * About +++<span class="time-to-complete-text"></span>+++
-* Android Studio, version 2.4 or higher. You can download Android Studio, along with the latest Android SDK, from https://developer.android.com/studio/index.html . The system requirements for the IDE are also found at that link.
-* The Java Development Kit (JDK), version 1.7 or higher
+* Android Studio, version 3.0 or higher. You can download Android Studio, along with the latest Android SDK, from https://developer.android.com/studio/index.html . The system requirements for the IDE are also found at that link.
+* The Java Development Kit (JDK), version 1.8 or higher
 
 == Create a new Android Studio project
 
@@ -44,22 +44,23 @@ There may be two files called `gradle.properties`. One is local to the project. 
 
 The file `settings.gradle` is used by Gradle to configure the multi-project build. It should consist of a single line:
 
-[source,groovy]
-----
-include ':app'
-----
+====
+include::sample[dir="groovy-dsl/code",files="settings.gradle[]"]
+include::sample[dir="kotlin-dsl/code",files="settings.gradle.kts[]"]
+====
 
 This tells Gradle that the `app` sub-directory is also a Gradle project. If, at some later time, you were to add an Android Library to this project through the available wizard, another project sub-directory would be created and added to this file.
 
 The last file is called `gradle-wrapper.properties`, which configures the so-called Gradle Wrapper. This allows you to build Android projects without having to install Gradle first. The contents of the file should be similar to:
 
-[source,groovy]
+.gradle/gradle-wrapper.properties
+[source,properties]
 ----
 distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-4.1-all.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-5.0-all.zip
 ----
 
 The first four lines indicate that when the wrapper runs the first time, it will download a Gradle distribution and store it in the directory `.gradle/wrapper/dists` in your home directory.
@@ -72,34 +73,10 @@ NOTE: The specific version number might differ from that shown here (4.1), and t
 
 The project `build.gradle` file should have contents similar to:
 
-[source,groovy]
-----
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {                 // <1>
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {            // <2>
-        classpath 'com.android.tools.build:gradle:3.0.1'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {                 // <3>
-    repositories {
-        google()
-        jcenter()
-    }
-}
-
-task clean(type: Delete) {    // <4>
-    delete rootProject.buildDir
-}
-----
+====
+include::sample[dir="groovy-dsl/code",files="build.gradle[]"]
+include::sample[dir="kotlin-dsl/code",files="build.gradle.kts[]"]
+====
 <1> Download plugins block
 <2> Identifies the Android plugin
 <3> Configuration for top-level and module projects
@@ -119,33 +96,17 @@ Finally, the build file contains a custom (or _ad hoc_) task, called `clean`. It
 
 Open the `build.gradle` file in the `app` module. The first line is:
 
-[source,groovy]
-----
-apply plugin: 'com.android.application'
-----
+====
+include::sample[dir="groovy-dsl/code/app",files="build.gradle[tags=apply-plugin]"]
+include::sample[dir="kotlin-dsl/code/app",files="build.gradle.kts[tags=apply-plugin]"]
+====
 
 This "applies" the Android plugin (referred to in the `buildscript` section of the top-level build file) to the current project. Plugins in Gradle can add custom tasks, new configurations, dependencies, and other capabilities to Gradle projects. In this case, applying the Android plugin adds a wide variety of tasks, which are configured by the `android` block shown next.
 
-[source,groovy]
-----
-android {
-    compileSdkVersion 26
-    defaultConfig {
-        applicationId "org.gradle.helloworldgradle"
-        minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-----
+====
+include::sample[dir="groovy-dsl/code/app",files="build.gradle[tags=configure-plugin]"]
+include::sample[dir="kotlin-dsl/code/app",files="build.gradle.kts[tags=configure-plugin]"]
+====
 
 These properties are more relevant to Android than the Gradle build system, to they will only be lightly reviewed here. In short:
 
@@ -161,17 +122,10 @@ Below this section is a block called `buildTypes`. By default, Android apps supp
 
 After the `android` block, there is a block that shows the libraries used for this app.
 
-[source,groovy]
-----
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-}
-----
+====
+include::sample[dir="groovy-dsl/code/app",files="build.gradle[tags=dependencies]"]
+include::sample[dir="kotlin-dsl/code/app",files="build.gradle.kts[tags=dependencies]"]
+====
 
 Configuring dependencies is a fundamental part of building Gradle applications. In this case, the `dependencies` section shows values for the `implementation`, `testImplementation`, and `androidTestImplementation` configurations.
 
