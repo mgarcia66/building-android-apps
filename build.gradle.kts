@@ -1,6 +1,6 @@
 plugins {
     id("com.gradle.build-scan") version "2.0.1"
-    id("org.gradle.guides.tutorial") version "0.15.1"
+    id("org.gradle.guides.base") version "0.15.3"
 }
 
 configure<org.gradle.guides.GuidesExtension> {
@@ -9,8 +9,8 @@ configure<org.gradle.guides.GuidesExtension> {
 }
 
 buildScan {
-    setTermsOfServiceUrl("https://gradle.com/terms-of-service")
-    setTermsOfServiceAgree("yes")
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
     if (!System.getenv("CI").isNullOrEmpty()) {
         publishAlways()
         tag("CI")
